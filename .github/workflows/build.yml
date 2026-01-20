@@ -1,21 +1,32 @@
-name: indopedia
-description: Aplikasi Agen Pulsa INDOPEDIA
-publish_to: 'none'
+name: Build APK
 
-version: 1.0.0+1
+on:
+  push:
+    branches: [ "main" ]
 
-environment:
-  sdk: ">=2.17.0 <4.0.0"
+jobs:
+  build:
+    runs-on: ubuntu-latest
 
-dependencies:
-  flutter:
-    sdk: flutter
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-  cupertino_icons: ^1.0.6
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.6'
 
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
+      - name: Install dependencies
+        working-directory: mobile_app
+        run: flutter pub get
 
-flutter:
-  uses-material-design: true
+      - name: Build APK
+        working-directory: mobile_app
+        run: flutter build apk --release
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: indopedia-apk
+          path: mobile_app/build/app/outputs/flutter-apk/app-release.apk
