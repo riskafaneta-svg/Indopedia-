@@ -9,24 +9,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v3
 
-      - name: Setup Flutter
+      - name: Install Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.19.6'
+          flutter-version: "3.19.0"
 
-      - name: Install dependencies
-        working-directory: mobile_app
-        run: flutter pub get
+      - name: Install Dependencies
+        run: |
+          cd mobile_app
+          flutter pub get
 
       - name: Build APK
-        working-directory: mobile_app
-        run: flutter build apk --release
+        run: |
+          cd mobile_app
+          flutter build apk --release
 
       - name: Upload APK
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
-          name: indopedia-apk
+          name: app-release
           path: mobile_app/build/app/outputs/flutter-apk/app-release.apk
