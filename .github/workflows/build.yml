@@ -1,25 +1,37 @@
-name: indopay
-description: INDOPAY Agen Pulsa & PPOB
-publish_to: 'none' # private project
-version: 1.0.0+1
+name: Build APK INDOPAY
 
-environment:
-  sdk: ">=2.20.0 <3.0.0"
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
 
-dependencies:
-  flutter:
-    sdk: flutter
-  firebase_core: ^2.24.0
-  firebase_auth: ^4.10.0
-  provider: ^6.0.6
-  http: ^1.1.0
-  fluttertoast: ^8.2.2
-  shared_preferences: ^2.1.1
+jobs:
+  build:
+    runs-on: ubuntu-latest
 
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
-  flutter_lints: ^2.1.1
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
 
-flutter:
-  uses-material-design: true
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.13.7'
+
+      - name: Install Dependencies
+        run: |
+          flutter clean
+          flutter pub get
+
+      - name: Build APK
+        run: flutter build apk --release
+
+      - name: Rename APK to INDOPAY
+        run: mv build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/INDOPAY.apk
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: INDOPAY-apk
+          path: build/app/outputs/flutter-apk/INDOPAY.apk
