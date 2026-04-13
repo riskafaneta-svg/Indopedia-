@@ -1,9 +1,0 @@
-INDOPEDIA/
-├─ mobile_app/
-│  ├─ lib/
-│  │  └─ main.dart  (kosong / template minimal)
-│  ├─ pubspec.yaml
-│  └─ android/, ios/, ... (default Flutter)
-├─ .github/
-│  └─ workflows/
-│     └─ build.yml
